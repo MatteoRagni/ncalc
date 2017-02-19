@@ -177,11 +177,12 @@ $$
 \end{array}
 $$
 
-per $x_s = \Delta x~s + a$; espandendo la sommatoria, si ha:
+per $$x_s = \Delta x~s + a$$; espandendo la sommatoria, si ha:
 
 $$
 \begin{array}{rcl}
-\sum_{s=0}^{n-1}{f(x_{s}) + f(x_{s+1})} & = & (f(x_0) + f(x_1)) + (f(x_1) + f(x_2)) + \dots + (f(x_{n-2} + f(x_{n-1})) + (f(x_{n-1}) + f(x_n)) \\
+\sum_{s=0}^{n-1}{f(x_{s}) + f(x_{s+1})} & = & (f(x_0) + f(x_1)) + (f(x_1) + f(x_2)) + \dots + \\
+ & & + (f(x_{n-2} + f(x_{n-1})) + (f(x_{n-1}) + f(x_n)) \\
 & = & f(x_0) + f(x_n) + \sum_{s=1}^{n-1}{2f(x_s)} \\
 & = & f(a) + f(b) + 2 \sum_{s=1}^{n-1}{f(x_s)}
 \end{array}
