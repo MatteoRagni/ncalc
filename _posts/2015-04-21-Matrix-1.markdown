@@ -1,0 +1,559 @@
+---
+layout: post
+title:  "La classe Matrix"
+date:   2015-04-21 10:00:00
+categories: post
+permalink: /lecture8a/
+lecture: "Lezione 8 (parte 1)"
+---
+
+Iniziamo a costruire la nostra classe `Matrix`, partendo dalla definizione di una classe di errore specifica, un metodo di inizializzazione, un metodo di accesso agli elementi di una matrice e un metodo di salvataggio di un valore in una specificazione posizione della matrice.
+
+* table of contents.
+{:toc}
+
+## La classe Matrix
+
+Inizia il nostro dolorosissimo viaggio nella definizione di una classe `Matrix` (il nome di una classe deve sempre cominciare con la lettera maiuscola). Affinchè una classe di questo tipo possa considerarsi utilizzabile, vogliamo definire, come metodi **public** (cioè interfaccia della classe):
+
+ * un metodo per costruire una matrice
+ * un metodo per accedere ai singoli elementi della matrice, sia in lettura che in scrittura
+ * l'operatore somma
+ * l'operatore differenza
+ * l'operatore prodotto per scalare
+ * l'operatore prodotto tra matrici
+ * l'operatore di trasposizione
+
+Non ci concentriamo per ora su altri metodi per motivi di tempo nello sviluppo di queste lezioni. Prima della nostra classe creiamo un paio di calssi di errore specifiche, ereditando i metodi dalle classi `ArgumentError` e `RuntimeError`:
+
+```ruby
+class MatrixArgumentError < ArgumentError; end
+class MatrixRuntimeError < RuntimeError; end
+
+class Matrix
+  # Inizializzazione
+  def initialize()
+  
+  end
+  
+  # Accesso alla matrice
+  def []()
+  
+  end
+  
+  # Assegnazione a elemento dela matrice
+  def []=()
+  
+  end
+  
+  # Somma tra matrici
+  def +()
+  
+  end
+  
+  # Differenza tra matrici
+  def -()
+  
+  end
+  
+  # Prodotto con scalare
+  # Prodotto con matrice
+  def *()
+  
+  end
+
+  # Traspsizione di matrici
+  def t()
+  
+  end
+end
+``` 
+
+### Il design della classe
+
+Il primo passo nello sviluppo della classe è la produzione di un design iniziale nel quale si possano riconoscere quelle che saranno le funzioni e le caratteristiche di cui avremo bisogno. A parte alcune considerazioni che saranno abbastanza banali, la prima che facciamo è: **per motivi di efficienza del codice, costruiremo una matrice il cui indice è basato sulla indicizzazione [Row-Major Order e Column-Major order][columnmajor]**, quindi la matrice avrà l'aspetto di un grandissimo vettore, di cui dovremmo conoscere la dimensione di riga e di colonna, e per accedere alla posizione di un elemento della matrice.
+
+La scelta tra Row-Major e Column-Major non è facile, ma se consideriamo che una matrice ha bisogno dela funzione di trasposizione, possiamo switchre mediante un flag tra le due tipologie per poter accedere alla matrice, semplificando ulteriormente il peso computazionale del calcolo. Quindi le variabili che la nostra classe necessiterà sono:
+
+ * una variabile Array che contiene i dati dela matrice
+ * una variabile che contiene la dimensione della matrice
+ * una flag che ci dice se è in Row-Major o Column-Major mode
+
+#### Tipi di variabile e accesso
+Le variabili di una classe possono essere di due tipi:
+
+ * variabili di classe, ovvero variabili codivise da tutti gli oggetti di una classe, si identificano dalla presenza di una doppia chiocciola davanti al nome: `@@variabile_di_classe`
+ * variabili di istanza (più comuni), ovvero variabili che sono specifiche di una singola istanza di classe - o di oggetto, si identificano dala presenza di una singola chiocciola davanti al nome: `@variabile_di_istanza`
+ 
+Per fare un esempio, immaginate di avere una classe Persona. Ogni istanza di classe è un oggetto Persona. Per ogni Persona può considerarsi variabile di istanza le variabili `@nome` e `@cognome`. Se vogliamo integrare alla classe Persona la possibilità di contare tutte le istanze di Persona create, possiamo aggiungere una variabile di classe chiamata `@@contatore`. Questa ultima variabile fa parte della classe e non delle singole istanze.
+
+Per motivi di completezza è necessario citare anche le variabili **locali**, ovvero variabili senza chiocciola davanti che esistono solo all'interno dello "scope" in cui sono state create (funzione, blocco `if`, etc.).
+
+Discorso molto importante: **le caratteristiche di accesso ad una variabile**. Una variabile (sia di istanza che di classe) non può essere acceduta normalmente da un codice esterno alla implementazione della classe: questo perchè in Ruby tutte le variabili sono di tipo **private**, fino a quando non si creano funzioni specifiche che ne permettano la letture (**getter**) o la scrittura (**setter**). Data una variabile `@nome_variabile`, getter e setter assumono in modo semplificato la forma:
+
+```ruby
+class Esempio
+  def initialize(n)
+    @nome_variabile = n
+  end
+  
+  # Implementazione di un getter
+  def nome_variabile
+    return @nome_variabile
+  end
+  
+  # Implementazione di un setter
+  def nome_variabile=(n)
+    @nome_variabile = n
+  end
+end
+```
+
+Dove risiede il vantaggio? In realtà sono molteplici:
+
+ * immaginate di avere una variabile `@password`, solitamente questo tipo di variabile o è completamente privata o presenta solo il setter.
+ * immaginate di avere una variabile `@random`, che contiene un numero generato casualmente alla creazione dell'oggetto. Probabilmente per questa variabile è necessario solo un getter.
+ * La possibilità di scrivere il getter ci permette di implementare anche delle funzioni di controllo sull'input dell'utente (usando `raise` se dovesse generarsi un errore), rendendo robusta la implementazione della nostra classe.
+ 
+A volte scrivere getter e setter per tutte le variabili di istanza può essere lungo e noioso, quindi se per le variabili non si hanno esigenze particolari, esistono delle shortcut che definiscono setter e getter al posto nostro (nota bene: **solo per le variabili di istanza**, non per le variabili di classe). Tali metodi prendono come argomento un `Symbol`, che ci permette di puntare direttamente alla variabile di classe (ad esempio: per `@variabile` si usa `:variabile`). Tali scorciatoie sono:
+
+ * `attr_reader :variabile_a, :variabile_b`: definisce dei metodi getter per le variabili `@variabile_a` e `@variabile_b`
+ * `attr_writer :variabile_a, :variabile_b`: definisce dei metodi setter semplice (uguale a quello dell'esempio precedente, quindi senza controllo dell'input utente) per le variabili `@variabile_a` e `@variabile_b`
+ * `attr_accessor :variabile_a, :variabile_b`: definisce dei metodi getter e setter semplice per le variabili `@variabile_a` e `@variabile_b`
+ 
+Utilizzando tali scorciatoie, l'esempio precedente diventa:
+
+```ruby
+class Classe
+  def initialize(n)
+    @nome_variabile = n
+  end
+  
+  attr_accessor :nome_variabile
+end
+```
+
+#### Accessibilità delle funzioni
+
+Discorso molto simile per le funzioni: esistono delle funzioni che sono di classe e delle funzioni che sono invece relative all'istanza. Solitamente, il costruttore della classe è un metodo di classe. Nella lettura della documentazione su [RubyDoc][rubydoc] della classe Array, si possono distinguere i metodi di classe come `::try_convert` dai metodi di istanza come `#size`.
+
+A livello di implementazione, le due tipologie di metodi si esplicitano come segue:
+
+```ruby
+class Classe
+  @@variabile_di_classe = 0
+  
+  def initialize(n)
+    @nome_variabile = n
+    @@variabile_di_classe += 1
+  end
+  
+  attr_accessor :nome_variabile
+  
+  def Classe.metodo_di_classe
+    return @@variabile_di_classe
+  end
+  
+  def metodo_di_istanza
+    return @@variabile_di_classe * @nome_variabile
+  end
+end
+
+# Nel codice possono essere chiamati cosi:
+oggetto = Classe.new(10)
+
+Classe.metodo_di_classe
+
+oggetto.metodo_di_istanza
+
+```
+
+A differenza delle variabili, i metodi di classe sono tutti **public**, a meno che non siano specificati dopo la keyword **private**:
+
+```ruby
+class Classe
+  @@variabile_di_classe = 0
+  
+  def initialize(n)
+    @nome_variabile = n
+    @@variabile_di_classe += 1
+  end
+  
+  # metodi publici
+  attr_accessor :nome_variabile
+  
+  def metodo_di_istanza
+    return @@variabile_di_classe * @nome_variabile
+  end
+  
+  private
+  def metodo_privato(n)
+    @nome_variabile = 5 * n
+  end
+end
+```
+ 
+### `initialize`
+
+Una delle prime funzioni da scrivere sarà sicuramente la inizializzazione della matrice. Un inizializzatore della classe si definisce nella funzione `initialize`, epuò essere richiamata dal codice come `Matrix.new`. Il primo inizializzatore che creiamo genera un matrice della dimensione desiderata con tutti i valori pari al risultato di un blocco. Come scelta di design, l'accesso Row-Major o Column-Major deve essere trasparente per l'utente (sono tecnicismi che non lo devono interessare), quindi inizializziamo la nostra matrice sempre a Row-Major, per cambiare nel caso sia invocata una trasposizione.
+
+```ruby
+def initialize(rows, cols = nil, value = 0)
+  if not cols
+    cols = rows
+  end
+  
+  @row_major = true
+  @rows = rows
+  @cols = cols
+  
+  @matrix = []
+  for i in 0...@rows
+    for j in 0...@cols
+      value = yield(i,j) if block_given?
+      @matrix << value
+    end
+  end  
+end
+  
+attr_reader :rows, :cols
+```
+
+Analizziamo nel dettaglio questo codice. 
+
+L'utente, in ingresso deve specificare almeno il numero di righe che avrà la matrice, tramite l'argomento `rows`. La specifica del numero di colonne è opzionale, e se non è specificato nessun valore per `cols`, si imposta `cols = rows` alla linea 3. 
+
+Si inizializzano le variabili di istanza, che valgono quindi solamente per un oggetto Matrix: sono una flag che ci indica lo stato della matrice (se in Row Major ordering o in Column Major ordering, rispettivamente se `@row_major` è `true` o `false`), una variabile che contiene il numero di righe e una che contiene il numero di colonne. Completa lo stato del nostro oggetto un Array `@matrix` vuoto.
+
+Dalle righe 10 a 16, cominciamo a popolare la variabile `@matrix`. La funzione `block_given?` ritorna `true` se l'utente ha fornito in ingresso alla inizializzazione un blocco. Se è stato fatto, le variabili passate internamente al blocco sono la posizione _riga_, _colonna_ in cui ci troviamo attualmente. Il valore ritornato dal blocco è inserito dentro l'Array `@matrix` alla linea 14. Il fatto il ciclo interno (linea 12) sia basato sulle colonne mentr il ciclo esterno (linea 11) sia basato sulle righe ci garantisce il rispetto della condizione di inserimento di valori all'interno dell'Array secondo il principio di **Row Major** ordering.
+
+Subito dopo la definizione della funzione di inizializzazione, dichiariamo la **visibilità delle variabili di istanza** mediante la shortcut `attr_reader`. In questo caso mettiamo a disposizione del client (chi userà la istanza), solamente in lettura, le variabili `@rows` e `@cols`.
+
+Sembra relativamente complicato, ma questa funzione garantisce una certa libertà nella dichiarazione di una nuova matrice. Alcuni esempi di utilizzo sono:
+
+```ruby
+# Definizione di una matrice quadrata inizializzata tutta a 0
+m = Matrix.new(5)
+
+# Definizione di una matrice 3x4 inizializzata tutta a 0
+m = Matrix.new(3, 4)
+
+# Definizione di una matrice 3x4 inizializzata tutta a 2
+m = Matrix.new(3, 4, 2)
+m = Matrix.new(3, 4) { 2 }
+
+# Definizione di una matrice con elemento m[i,j]
+# che è funzione di i e j
+m = Matrix.new(3, 4) { |i, j| Math::E(i) * j }
+
+# Definizione di una matrice identità
+m = Matrix.new(5) { |i,j| ( i == j ? 1 : 0 ) }
+```
+
+Ovviamente questa implementazione non risulta essere in alcun modo robusta. Non abbiamo modo di controllare che cosa l'utente sta passando in ingresso alla matrice. Inseriamo qualche metodo di controllo di argomento al fine di ottenere un inizializzatore più robusto.
+
+```ruby
+  def initialize(rows, cols = nil, value = 0)
+    raise MatrixArgumentError,
+    "rows must be of Fixnum class, not #{rows.class}" if not rows.is_a?(Fixnum)
+    if not cols
+      cols = rows
+    end
+    raise MatrixArgumentError,
+    "cols must be of Fixnum class, not #{cols.class}" if not cols.is_a?(Fixnum)
+    
+    @row_major = true
+    @rows = rows
+    @cols = cols
+    
+    @matrix = []
+    for i in 0...@rows
+      for j in 0...@cols
+        value = yield(i,j) if block_given?
+        raise MatrixArgumentError, 
+        "value must be of Numeric class, not #{value.class}" if not value.is_a?(Numeric)
+        @matrix << value
+      end
+    end  
+  end
+  
+  attr_reader :rows, :cols
+```
+
+Questa implementazione controlla sia i valori forniti in ingresso come argomenti, che il risultato della eventuale valutazione del blocco. 
+
+#### Altri costruttori: metodi di classe
+
+Nell'esempio precedente abbiamo mostrato come sia possibile generare una matrice identità in una singola linea di codice. Un inizializzatore di matrici identità potrebbe essere una aggiunta molto interessante alla nostra classe, che in questo modo potrebbe generare direttamente tali matrici, dato un solo elemento in ingresso.
+
+Un costruttore di questo tipo si specifica con un metodo di classe. Oltre al costruttore di matrici identità, possiamo specificare un costruttore di matrici random:
+
+> Il nome `eye` per la generazione di matrici identità deriva dalla omonima funzione Matlab.
+
+```ruby
+def Matrix.eye(n)
+  return Matrix.new(n) { |i,j| (i == j ? 1 : 0) }
+end
+
+def Matrix.rand(r, c = nil, range = (0.0)..(1.0))
+  return Matrix.new(r, (c ? c : r)) { Random.rand(range) }
+end
+```
+
+### Accesso e assegnazione 
+
+Scriviamo delle funzioni che ci permettano di accedere ala matrice esattamente come un Array (ovvero utilizzando le parentesi quadre). Il comportamento che vogliamo ottenere è il seguente: se si fornisce un numero solo all'interno delle parentesi quadre, si entra nella matrice esattamente come gli Array, se si specificano due numeri, si entra nella matrice come riga e colonna, in funzione dell'ordinamento, come riga e colonna.
+
+Introduciamo inoltre un metodo `each`, per poi includere il **modulo Enumerable**. I **moduli** sono collezioni di metodi utili che possono essere inclusi in una classe. Un esempio di modulo oltre Enumerable è il modulo **Math** che include le funzioni matematiche comuni.
+
+Includendo Enumerable dopo aver definito `each` ci permette di ereditare diverse funzioni utili (come ad esempio `each_with_index`, etc.) che sono definite automaticamente (senza scrivere ulteriori righe di codice).
+
+```ruby
+# Accesso alla matrice
+def [](i, j = nil)
+  if j
+    raise MatrixArgumentError,
+    "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+    raise MatrixArgumentError,
+    "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+    if @row_major then
+      return @matrix[i * @cols + j]
+    else
+      return @matrix[j * @rows + i]
+    end
+  else
+    raise MatrixArgumentError,
+    "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+    return @matrix[i]
+  end
+end
+
+# Assegnazione a elemento dela matrice
+def []=(i,j = nil, value)
+  if j
+    raise MatrixArgumentError,
+    "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+    raise MatrixArgumentError,
+    "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+    if @row_major then
+    if @row_major then
+      @matrix[i * @cols + j] = value
+    else
+      @matrix[j * @rows + i] = value
+    end
+  else
+    raise MatrixArgumentError,
+    "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+    @matrix[i] = value
+  end
+end
+
+# Definizione del metodo each
+def each
+  for i in 0...@rows
+    for j in 0...@cols
+      yield(self[i,j])
+    end
+  end
+  return self
+end
+
+# Inclusione di Enumerable
+include Enumerable
+```
+
+Alcune funzioni non sono definite automaticamente. Continuando sulla falsa riga degli Array, probabilemente ci farebbe comodo avere funzioni che iterano attraverso gli indici di riga e colonna. Purtroppo questi metodi vanno definiti manualmente, sulla base del metodo `each_with_index`. Conoscendo la flag `@row_major` e l'indice al'interno della matrice, possiamo ricostruire la posizione di riga e di colonna. Siccome questa funzione dipende strettamente dalla configurazione interna, e potrebbe essere comodo utilizzarla più volte, la introduciamo sotto forma di **funzione privata in fondo alla classe dopo la keyword `private`**.
+
+```ruby
+def each_with_indexes
+  each_with_index { |e,i|
+    row, col = get_indexes(i)
+    yield(e, row, col)
+  }
+end
+
+def map_each_with_indexes
+  each_with_indexes { |e, row, col|
+    self[row,col] = yield(e, row, col)
+  }
+end
+
+# I metodi definiti dopo la keyword 
+# private sono privati per la classe
+private
+def get_indexes(n)
+  raise MatrixArgumentError,
+    "get_index(n): n must be Fixnum, not #{n.class}" if not n.is_a?(Fixnum)
+  if @row_major then
+    row = n / @cols
+    col = n % @cols
+  else 
+    row = n / @rows
+    col = n % @rows
+  end
+  return row, col
+end
+```
+
+### Stampa della matrice
+
+Ultimo metodo che definiamo in questa lezione, `to_s`. Questo metodo trasforma il contenuto della matrice in una stringa stampabile a schermo:
+
+```ruby
+# Trasforma oggetto Matrix in stringa
+def to_s
+  for i in 0...@rows
+    print "|"
+    for j in 0...@cols
+      print "\t#{self[i,j]}"
+    end
+    print "\t|\n"
+  end
+end
+```
+
+Da notare che avendo usato i metodi descritti in precedenza, questa funzione è robusta nei confronti del tipo di _ordering_ in cui ci troviamo.
+
+## Riassumendo...
+
+Una overview della classe fino a questo punto:
+
+```ruby
+#!/usr/bin/env ruby
+
+# matrix.rb
+
+class MatrixArgumentError < ArgumentError; end
+class MatrixRuntimeError < RuntimeError; end
+
+class Matrix
+  # Inizializzazione
+  def initialize(rows, cols = nil, value = 0)
+    raise MatrixArgumentError,
+      "rows must be of Fixnum class, not #{rows.class}" if not rows.is_a?(Fixnum)
+    if not cols
+      cols = rows
+    end
+    raise MatrixArgumentError,
+      "cols must be of Fixnum class, not #{cols.class}" if not cols.is_a?(Fixnum)
+    
+    @row_major = true
+    @rows = rows
+    @cols = cols
+    
+    @matrix = []
+    for i in 0...@rows
+      for j in 0...@cols
+        value = yield(i,j) if block_given?
+        raise MatrixArgumentError, 
+          "value must be of Numeric class, not #{value.class}" if not value.is_a?(Numeric)
+        @matrix << value
+      end
+    end  
+  end
+  
+  attr_reader :rows, :cols
+  
+  def Matrix.eye(n)
+    return Matrix.new(n) { |i,j| (i == j ? 1 : 0) }
+  end
+  
+  def Matrix.rand(r, c = nil, range = (0.0)..(1.0))
+    return Matrix.new(r, (c ? c : r)) { Random.rand(range) }
+  end
+  
+  # Accesso alla matrice
+  def [](i, j = nil)
+    if j
+      raise MatrixArgumentError,
+      "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+      raise MatrixArgumentError,
+      "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+      if @row_major then
+        return @matrix[i * @cols + j]
+      else
+        return @matrix[j * @rows + i]
+      end
+    else
+      raise MatrixArgumentError,
+      "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+      return @matrix[i]
+    end
+  end
+  
+  # Assegnazione a elemento dela matrice
+  def []=(i,j = nil, value)
+    if j
+      raise MatrixArgumentError,
+      "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+      raise MatrixArgumentError,
+      "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+      if @row_major then
+      if @row_major then
+        @matrix[i * @cols + j] = value
+      else
+        @matrix[j * @rows + i] = value
+      end
+    else
+      raise MatrixArgumentError,
+      "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+      @matrix[i] = value
+    end
+  end
+  
+  def each
+    for i in 0...@rows
+      for j in 0...@cols
+        yield(self[i,j])
+      end
+    end
+    return self
+  end
+  include Enumerable
+  
+  def each_with_indexes
+    each_with_index { |e,i|
+      row, col = get_indexes(i)
+      yield(e, row, col)
+    }
+  end
+  
+  def map_each_with_indexes
+    each_with_indexes { |e, row, col|
+      self[row,col] = yield(e, row, col)
+    }
+  end
+  
+  # Trasforma oggetto Matrix in stringa
+  def to_s
+    for i in 0...@rows
+      print "|"
+      for j in 0...@cols
+        print "\t#{self[i,j]}"
+      end
+      print "\t|\n"
+    end
+  end
+  
+  private
+  def get_indexes(n)
+    raise MatrixArgumentError,
+      "get_index(n): n must be Fixnum, not #{n.class}" if not n.is_a?(Fixnum)
+    if @row_major then
+      row = n / @cols
+      col = n % @cols
+    else 
+      row = n / @rows
+      col = n % @rows
+    end
+    return row, col
+  end
+end
+
+```
+
+
+
+ 
+[columnmajor]: http://en.wikipedia.org/wiki/Row-major_order
+[rubydoc]: ruby-doc.org/core-2.2.0/Array.html

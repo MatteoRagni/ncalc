@@ -1,0 +1,366 @@
+---
+layout: post
+title:  "La classe Matrix (2 parte)"
+date:   2015-04-22 10:00:00
+categories: post
+permalink: /lecture8b/
+lecture: "Lezione 8 (parte 2)"
+---
+
+Implementiamo le ultime funzioni accessorie utili per la nostra classe `Matrix`, per concludere con quelli che sono i metodi più "algoritmici", quali funzioni algebriche e prodotto tra matrici.
+
+* table of contents.
+{:toc}
+
+## La classe Matrix
+
+### Le dimensioni della matrice
+
+La nostra matrice presenta una natura duplice. Possiamo accedervi come matrice, oppure sotto forma di Array. Al fine di mantenere un contatto con questa natura duplice, definiamo due funzioni di comodo:
+
+ * `size`: che ritorna la dimensione della matrice sotto forma di Array contente numero di righe e di colonne.
+ * `length`: che ritorna il numero di elementi contenuti nella variabile `@matrix`
+
+```ruby
+def size
+  return [@rows, @cols]
+end
+
+def length
+  return @matrix.size
+end
+```
+
+### La trasposizione
+
+Qui vediamo tutta la potenza della formulazione Row-major e Column-major. La funzione di trasposizione potrebbe essere abbastanza complessa se volessimo copiare la matrice in una nuova trasposta. Con la nostra formulazione, scambiando le variabili `@rows` e `@cols` tra loro e impostando la flag `@row_major` a `false` rapresenta una operazione di trasposizione completa.
+
+Ricordiamoci di ritornare la matrice intera una volta terminata la trasposizione, sfruttando la keyword `self`, **che rappresenta la istanza di oggetto con cui stiamo lavorando**.
+
+```ruby
+# Traspsizione di matrici
+def t
+  @row_major = (@row_mayor ? false : true)
+  @rows, @cols = @cols, @rows
+  return self
+end
+```
+
+### Operazioni tra matrici
+
+#### Somma e differenza
+
+A questo punto, la somma membro a membro di due matrici dovrebbe essere facile da capire. L'operazione di somma è effettuata tra `self` e una altra matrice `m`, argomento del metodo `+`. Stesso discorso per la differenza.
+
+I due metodi ritornano delle matrici nuove, che contengono il risultato della somma (o differenza)
+
+```ruby
+# Somma tra matrici
+def +(m)
+  raise MatrixArgumentError,
+    "m must be a Matrix, not #{m.class}" if not m.is_a?(Matrix)
+  raise MatrixRuntimeError,
+    "m.size is #{m.size}, differs from #{size}" if m.size != size
+  return Matrix.new(@rows, @cols) { |i, j| self[i,j] + m[i,j] }
+end
+
+# Differenza tra matrici
+def -(m)
+  raise MatrixArgumentError,
+    "m must be a Matrix, not #{m.class}" if not m.is_a?(Matrix)
+  raise MatrixRuntimeError,
+    "m.size is #{m.size}, differs from #{size}" if m.size != size
+  return Matrix.new(@rows, @cols) { |i,j| self[i,j] - m[i,j] }
+end
+```
+
+#### Prodotto tra matrici
+
+Il prodotto si comporta in modo differente in funzione dell'argomento fornito. Se l'argomento è un `Numeric`, si moltiplica ogni elemento della matrice per lo scalare (righe 4-5), altrimenti se l'argomento è una matrice, si effettua il prodotto tra matrici (righe 6-19). Ovviamente si genera un errore se l'argomento non è supportato.
+
+Date due matrici $$A \in \mathbb{R}^{n \times m}$$ e $$B \in \mathbb{R}^{p \times q}$$, il prodotto tra matrici $$A\times B$$ è definito se e solo se il numero di colonne della matrice $$A$$ è uguale al numerodi righe della matrice $$B$$, quindi $$m = p$$. Questo controllo è effettuato alla riga 7, e genera un errore di runtime nel caso le matrici non possano essere moltiplicate tra loro (ale righe 16-17).
+
+Sia $$C = A \times B$$, i singoli elementi della nuova matrice sono:
+
+$$
+C_{i,j} = \sum_{k=1}^{m}{A_{i,k} \cdot B_{k,j}}
+$$
+
+In generale: $$C \in \mathbb{R}^{n \times q}$$. Tutto questo è espresso dalla riga 8 alla riga 14.
+
+```ruby
+# Prodotto con scalare
+# Prodotto con matrice
+def *(a)
+  if a.is_a?(Numeric)
+    return Matrix.new(@rows, @cols) { |i,j| a * self[i,j] }
+  elsif a.is_a?(Matrix)
+    if @cols == a.rows then
+      return Matrix.new(@rows, a.cols) { |i,j|
+        r = 0
+        for k in 0...@cols
+          r += self[i,k] * a[k,j]
+        end
+        r
+      }
+    else
+      raise MatrixRuntimeError,
+        ("Cols (#{@cols}) and rows (#{a.size[0]}) dimensions" +
+         " must agree to perform Matrix multiplication")
+    end
+  else
+    raise MatrixArgumentError,
+      "* not defined for argument a of class #{a.class}"
+  end
+end
+```
+
+### La classe Matrix "completa"
+
+```ruby
+#!/usr/bin/env ruby
+
+# matrix.rb
+
+class MatrixArgumentError < ArgumentError; end
+class MatrixRuntimeError < RuntimeError; end
+
+class Matrix
+  # Inizializzazione
+  def initialize(rows, cols = nil, value = 0)
+    raise MatrixArgumentError,
+      "rows must be of Fixnum class, not #{rows.class}" if not rows.is_a?(Fixnum)
+    if not cols
+      cols = rows
+    end
+    raise MatrixArgumentError,
+      "cols must be of Fixnum class, not #{cols.class}" if not cols.is_a?(Fixnum)
+
+    @row_major = true
+    @rows = rows
+    @cols = cols
+
+    @matrix = []
+    for i in 0...@rows
+      for j in 0...@cols
+        value = yield(i,j) if block_given?
+        raise MatrixArgumentError,
+          ("value must be of Numeric class, " +
+           "not #{value.class}") if not value.is_a?(Numeric)
+        @matrix << value
+      end
+    end  
+  end
+
+  attr_reader :rows, :cols
+
+  def Matrix.eye(n)
+    return Matrix.new(n) { |i,j| (i == j ? 1 : 0) }
+  end
+
+  def Matrix.rand(r, c = nil, range = (0.0)..(1.0))
+    return Matrix.new(r, (c ? c : r)) { Random.rand(range) }
+  end
+
+  # Accesso alla matrice
+  def [](i, j = nil)
+    if j
+      raise MatrixArgumentError,
+      "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+      raise MatrixArgumentError,
+      "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+      if @row_major then
+        return @matrix[i * @cols + j]
+      else
+        return @matrix[j * @rows + i]
+      end
+    else
+      raise MatrixArgumentError,
+      "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+      return @matrix[i]
+    end
+  end
+
+  # Assegnazione a elemento dela matrice
+  def []=(i,j = nil, value)
+    if j
+      raise MatrixArgumentError,
+      "Row out of bound (#{i} > #{@rows - 1})" if i >= @rows
+      raise MatrixArgumentError,
+      "Col out of bound (#{j} > #{@cols - 1})" if j >= @cols
+      if @row_major then
+      if @row_major then
+        @matrix[i * @cols + j] = value
+      else
+        @matrix[j * @rows + i] = value
+      end
+    else
+      raise MatrixArgumentError,
+      "Index out of bound (#{i} > #{@matrix.size - 1})" if i >= @matrix.size
+      @matrix[i] = value
+    end
+  end
+
+  def each
+    for i in 0...@rows
+      for j in 0...@cols
+        yield(self[i,j])
+      end
+    end
+    return self
+  end
+  include Enumerable
+
+  def each_with_indexes
+    each_with_index { |e,i|
+      row, col = get_indexes(i)
+      yield(e, row, col)
+    }
+  end
+
+  def map_each_with_indexes
+    each_with_indexes { |e, row, col|
+      self[row,col] = yield(e, row, col)
+    }
+  end
+
+  # Somma tra matrici
+  def +(m)
+    raise MatrixArgumentError,
+      "m must be a Matrix, not #{m.class}" if not m.is_a?(Matrix)
+    raise MatrixRuntimeError,
+      "m.size is #{m.size}, differs from #{size}" if m.size != size
+    return Matrix.new(@rows, @cols) { |i, j| self[i,j] + m[i,j] }
+  end
+
+  # Differenza tra matrici
+  def -(m)
+    raise MatrixArgumentError,
+      "m must be a Matrix, not #{m.class}" if not m.is_a?(Matrix)
+    raise MatrixRuntimeError,
+      "m.size is #{m.size}, differs from #{size}" if m.size != size
+    return Matrix.new(@rows, @cols) { |i,j| self[i,j] - m[i,j] }
+  end
+
+  # Prodotto con scalare
+  # Prodotto con matrice
+  def *(a)
+    if a.is_a?(Numeric)
+      return Matrix.new(@rows, @cols) { |i,j| a * self[i,j] }
+    elsif a.is_a?(Matrix)
+      if @cols == a.rows then
+        return Matrix.new(@rows, a.cols) { |i,j|
+          r = 0
+          for k in 0...@cols
+            r += self[i,k] * a[k,j]
+          end
+          r
+        }
+      else
+        raise MatrixRuntimeError,
+          ("Cols (#{@cols}) and rows (#{a.size[0]}) dimensions" +
+           " must agree to perform Matrix multiplication")
+      end
+    else
+      raise MatrixArgumentError,
+        "* not defined for argument a of class #{a.class}"
+    end
+  end
+
+  # Traspsizione di matrici
+  def t
+    @row_major = (@row_mayor ? false : true)
+    @rows, @cols = @cols, @rows
+    return self
+  end
+
+  def size
+    return [@rows, @cols]
+  end
+
+  def length
+    return @matrix.size
+  end
+
+  # Trasforma oggetto Matrix in stringa
+  def to_s
+    for i in 0...@rows
+      print "|"
+      for j in 0...@cols
+        print "\t#{self[i,j]}"
+      end
+      print "\t|\n"
+    end
+  end
+
+  private
+  def get_indexes(n)
+    raise MatrixArgumentError,
+      "get_index(n): n must be Fixnum, not #{n.class}" if not n.is_a?(Fixnum)
+    if @row_major then
+      row = n / @cols
+      col = n % @cols
+    else
+      row = n / @rows
+      col = n % @rows
+    end
+    return row, col
+  end
+end
+
+# Le seguenti righe di codice ci permettono di usare le linee di codice
+# racchiuse nell'if come ambiente di test per la classe
+if __FILE__ == $0 then
+  m = Matrix.new(3,5) { |i,j| i * 5 + j }
+  t = Matrix.new(3,5) { |i,j| i * 5 + j }
+  k = Matrix.new(5,3) { |i,j| (i * 5 + j)/2 }
+  t = t.t
+
+  puts
+  puts m
+  puts
+  puts t
+  puts
+  puts k
+  puts
+  m.each_with_indexes { |e,i,j| puts "#{i},#{j}: #{e}" }
+  puts
+  t.each_with_indexes { |e,i,j| puts "#{i},#{j}: #{e}" }
+  puts
+  puts k + t
+  puts
+  s = Matrix.new(3) { 1 }
+  puts s
+  puts
+  puts s * s
+  puts
+  puts s * 10
+  puts
+  puts Matrix.eye(4)
+  puts Matrix.rand(3, 3, 0..10)
+  s[1,1] = 0
+  puts s[1,1]
+  puts s
+  s[8] = 0
+  puts s
+end
+```
+
+#### Includere uno script
+
+Le variabili globali `$0` e `__FILE__` specificano:
+
+ * `$0`: script fornito come argomento all'interprete Ruby
+ * `__FILE__`: file in cui si trovano le linee di codice eseguite da Ruby
+
+Queste due variabili sono uguali se e solo se lo script che state eseguendo è lo stesso che avete fornito in ingresso all'interprete, ovvero quando l'interprete non si trova in un file **richiesto** da un altro script.
+
+La vostra classe Matrix può essere utilizzata in script diversi, e non necessariamente copiata e incollata brutalmente in ogni script che scriverete. Immaginate di aver salvato la classe in un file `/home/studente/script/matrix.rb`, e stato lavorando sul file `/home/studente/script.rb`.
+
+In `script.rb` volete includere la classe Matrix? Aggiungete:
+
+```ruby
+require 'script/matrix.rb'
+```
+
+per richiedere il caricamento di un file esterno. In questo caso, nel file `matrix.rb`, la condizione `$0 == __FILE__` ritorna `false`!
