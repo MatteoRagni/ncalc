@@ -48,7 +48,7 @@ def bolletta(filename)
 end
 ```
 
-[Vai alla soluzione](/solutions/bolletta)
+[Vai alla soluzione]({{ "/solutions/bolletta" | relative_url }})
 
 ## Campionato
 
