@@ -5,6 +5,8 @@ date:   2015-02-07 15:40:50
 categories: post
 permalink: /lecture1/
 lecture: "Lezione 1"
+visible: 1
+excerpt: "<p>... con <code class='highlighter-rouge'>Ruby</code>, dobbiamo prendere confidenza con quelli che sono gli strumenti che utilizzeremo per sviluppare i nostri algoritmi. In questo post parleremo della console e dell'interprete <code class='highlighter-rouge'>irb</code>, che ci accompagneranno nell'arco di questo corso.</p>"
 ---
 
 ... con `Ruby`, dobbiamo prendere confidenza con quelli che sono gli strumenti che utilizzeremo per sviluppare i nostri algoritmi. In questo post parleremo della console e dell'interprete `irb`, che ci accompagneranno nell'arco di questo corso.

@@ -5,6 +5,8 @@ date:   2015-02-26 10:00:00
 categories: post
 permalink: /lecture6b/
 lecture: "Lezione 6 (parte 1)"
+visible: 1
+excerpt: "<p>Analizziamo <b>Numeric</b>, ovvero la classe dei numeri interi <b>Fixnum</b> e la classe dei numeri reali <b>Float</b>. Vedremo poi la classe degli <b>Array</b>, che sono molto comode nel campo della analisi numerica.</p>"
 ---
 
 Analizziamo **Numeric**, ovvero la classe dei numeri interi **Fixnum** e la classe dei numeri reali **Float**. Vedremo poi la classe degli **Array**, che sono molto comode nel campo della analisi numerica.
@@ -19,7 +21,7 @@ La classe **Numeric** è una classe di base che definisce in forma generale i me
 Per accedere ai metodi della classe, in Ruby, dato un oggetto, è necessario utilizzare la cosidetta **dot-notation**.
 
 Data una variabile `num`, istanza di un oggetto della classe Numeric, possiamo ricordare una serie di metodi utili:
- 
+
  * `num.abs`: ritorna il valore assoluto.
  * `num.ceil`: ritorna il numero intero più piccolo possibile che sia maggiore o uguale del numero in `num`.
  * `num.floor`: ritorna il numero intero più grande possibile che sia minore o uguale al numero in `num`.
@@ -35,7 +37,7 @@ La sottoclasse principe di Numeric è la classe **Fixnum**, che definisce i nume
 num = 5
 ```
 
-> In **generale**, la definizione di un numero intero si ottiene mediante l'assegnazione ad una variabile di un numero intero (ovvero un numero che non ha specificato il separatore delle cifre decimali, che è rappresentato da un punto). Quella variabile diventa automaticamente una istanza della classe Fixnum, e risponde a tutte le **regole della aritmetica tra interi**. 
+> In **generale**, la definizione di un numero intero si ottiene mediante l'assegnazione ad una variabile di un numero intero (ovvero un numero che non ha specificato il separatore delle cifre decimali, che è rappresentato da un punto). Quella variabile diventa automaticamente una istanza della classe Fixnum, e risponde a tutte le **regole della aritmetica tra interi**.
 
 Il range dei numeri Fixnum si estende fino ad una determinata dimensione, definita dalla configurazione dell'interprete. Quando si sfora questo range, automaticamente l'interprete trasforma il Fixnum in un Bignum, che dal punto di vista del tempo di esecuzione del codice è molto meno efficiente. A livello di interfaccia (**polimorfismo**) le due classi sono del tutto uguali.
 
@@ -59,7 +61,7 @@ num    = 1234.56   # Numero reale
 num_ns = 1.23456e3 # Notaz. scientifica
 
 # Nella notazione scientifica la
-# lettera "e" (o "E") rappresenta 
+# lettera "e" (o "E") rappresenta
 # l'esponente in base 10, quindi il numero
 # precedente è in realtà
 # 1.23456 * (10**3)
@@ -115,7 +117,7 @@ Un **Array** è una struttura abbastanza rispetto a quelle che abbiamo appena vi
 </div>
 
 Un array può essere definito o inizializzato come vuoto, oppure contenente dei valori. In Ruby (e non in moltissimi altri linguaggi), gli Array hanno le seguenti caratteristiche:
- 
+
  1. i dati contenute nelle singole caselline del vettore non devono essere necessariamente tutti della stessa classe.
  2. l'indice comincia da 0, e si specifica tra parentesi quadre: `ary[index]`
  3. non è necessario definire a priori la **dimensione** dell'Array (ovvero il numero delle caselline dentro le quali possimao inserire dati). La diensione dell'Array può quindi variare dinamicamente.
@@ -152,7 +154,7 @@ ary = [1.2, 6.43, 5.32, 2.35, 8.96]
 
 puts "Prima: #{ary.size}"
 
-# e possiamo inserire un nuovo elemento alla fine 
+# e possiamo inserire un nuovo elemento alla fine
 # dell'Array
 
 ary << 1.56
@@ -217,7 +219,7 @@ Forse, vedere come si scrive e cosa fa ci aiuterà a capire meglio di cosa stiam
 
 ary = [1.2, 6.43, 5.32, 2.35, 8.96]
 
-# Utilizziamo il metodo each che 
+# Utilizziamo il metodo each che
 # prende come argomento un Block che
 # esegue delle operazioni sui singoli
 # elementi
@@ -246,7 +248,7 @@ Esiste un secondo modo, equivalente, che al posto delle keywords `do |variable| 
 
 Esistono decine di metodi per la classe Array, molti dei quali utilissimi. Esistono metodi per ordinarne il contenuto (come `ary.sort`) o metodi per ottenere il massimo o il minimo (`ary.max` e `ary.min`). Vi consiglio caldamente di fare spesso riferimento alla documentazione ufficiale della [classe Array][aryclass]
 
-> Per comodità, alcuni metodi hanno spesso degli **alias**, ovvero possono essere chiamati in più modi diversi, ma eseguono lo stesso codice. Un esempio è il metodo che ritorna la dimensione di un Array: `ary.length == ary.size` 
+> Per comodità, alcuni metodi hanno spesso degli **alias**, ovvero possono essere chiamati in più modi diversi, ma eseguono lo stesso codice. Un esempio è il metodo che ritorna la dimensione di un Array: `ary.length == ary.size`
 
 Proviamo ad implementare un paio di metodi della classe giusto per imparare un po' ad utilizzare il linguaggio...
 
@@ -258,7 +260,7 @@ Troviamo il massimo facendo uso di `while`, di un blocco e poi testiamo il metod
 #!/usr/bin/env ruby
 
 # inizializza vettore
-ary = [4,-2,3,-23,189,46,343,12] 
+ary = [4,-2,3,-23,189,46,343,12]
 
 # Trova il massimo di un vettore (while)
 l = ary.length # lunghezza dell'Array
@@ -268,12 +270,12 @@ i = 1          # indice
 # La variabile m contiene il valore massimo
 # trovato
 while i < l do
-  
+
   # se il valore ary[i] 'nuovo' è piu grande del
-  # valore vecchio m, mi salva questo nuovo 
+  # valore vecchio m, mi salva questo nuovo
   # valore in m = ary[i]
-  m = ary[i] if m < ary[i] 
-  
+  m = ary[i] if m < ary[i]
+
   i = i + 1
 end
 puts "WHILE - Il massimo è: #{m}"
@@ -317,17 +319,17 @@ Dopo la prima iterazione il numero massimo si trova sempre in ultima posizione, 
 
 > Ovviamente stiamo ordinando un Array coerente, in cui tutti gli elementi appartengono alla stessa classe (nel nostro caso Numeric).
 
-Una prima implementazione fa uso del ciclo `for`. In seguito ne vediamo un altro con un metodo della classe Fixnum, che accetta un blocco come argomento. 
+Una prima implementazione fa uso del ciclo `for`. In seguito ne vediamo un altro con un metodo della classe Fixnum, che accetta un blocco come argomento.
 
 ```ruby
 #!/usr/bin/env ruby
- 
+
 # inizializza vettore
-ary = [4,-2,3,-23,189,46,343,12] 
- 
+ary = [4,-2,3,-23,189,46,343,12]
+
 # Attraversiamo tutto l'Array
 for l in 1...ary.length do
-  # Attraversiamo tutto l'Array fino 
+  # Attraversiamo tutto l'Array fino
   # alla posizione (ary.length - l)
   for i in (0...(ary.length - l))
     # Controlliamo se l'elemento successivo è
@@ -338,7 +340,7 @@ for l in 1...ary.length do
     end
   end
 end
- 
+
 puts "Array ordinato: #{ary}"
 ```
 
@@ -348,13 +350,13 @@ Il codice appena visto è funzionante, ma cerchiamo di capire meglio cosa fa aum
 #!/usr/bin/env ruby
 
 # inizializza vettore
-ary = [4,-2,3,-23,189,46,343,12] 
-  
+ary = [4,-2,3,-23,189,46,343,12]
+
 # Attraversiamo tutto l'Array
 for l in 1...ary.length do
   puts "Ciclo #{l} :: ary = #{ary}"
   puts "-- Sorting ary[0...#{ary.length - l}] = #{ary.slice(0,ary.length-l)}"
-  # Attraversiamo tutto l'Array fino 
+  # Attraversiamo tutto l'Array fino
   # alla posizione (ary.length - l)
   for i in (0...(ary.length - l))
     print "---- i = #{i} :: "
@@ -368,20 +370,20 @@ for l in 1...ary.length do
     print "\n"
   end
  end
-  
+
  puts "Array ordinato: #{ary}"
 ```
 
 Ad ogni ciclo for attraversiamo un sotto-Array, più piccolo di uno. L'output del programma è abbastanza auto-esplicativo. Il metodo `ary.slice(idx_start, idx_end)` seleziona una sottoparte dell'array.
 
-Possiamo implementarlo utilizzando gli altri metodi messi a disposizione. Ad esempio, il metodo `each` e il metodo `upto`: 
+Possiamo implementarlo utilizzando gli altri metodi messi a disposizione. Ad esempio, il metodo `each` e il metodo `upto`:
 
 ```ruby
 #!/usr/bin/env ruby
- 
+
 # inizializza vettore
-ary = [4,-2,3,-23,189,46,343,12] 
- 
+ary = [4,-2,3,-23,189,46,343,12]
+
 1.upto(ary.length) { |l|
   ary.slice(0, ary.length - l).each_index { |i|
     if ary[i] > ary[i.next]

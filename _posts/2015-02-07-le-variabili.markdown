@@ -5,6 +5,8 @@ date:   2015-02-11 16:00:00
 categories: post
 permalink: /lecture3/
 lecture: "Lezione 3"
+visible: 1
+excerpt: "<p>Argomento di questa lezione saranno i contesti e le variabili. Vedremo le varie tipologie di variabili e come possono essere utilizzate all'interno di uno script. Infine, ci concentreremo sui messaggi di errore e come imparare a leggerli per eseguire in modo efficiente il debug di uno script.</p>"
 ---
 
 Argomento di questa lezione saranno i contesti e le variabili. Vedremo le varie tipologie di variabili e come possono essere utilizzate all'interno di uno script. Infine, ci concentreremo sui messaggi di errore e come imparare a leggerli per eseguire in modo efficiente il debug di uno script.

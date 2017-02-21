@@ -5,6 +5,8 @@ date:   2015-02-10 16:00:00
 categories: post
 permalink: /lecture2/
 lecture: "Lezione 2"
+visible: 1
+excerpt: "<p>Creiamo il nostro primo script e rendiamolo eseguibile. Prima di continuare, cerchiamo di capire anche l'importanza dello stile nella scrittura del codice.</p>"
 ---
 
 Creiamo il nostro primo script e rendiamolo eseguibile. Prima di continuare, cerchiamo di capire anche l'importanza dello stile nella scrittura del codice.

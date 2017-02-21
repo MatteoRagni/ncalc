@@ -5,6 +5,8 @@ date:   2015-02-06 10:01:00
 categories: post
 permalink: /lecture00/
 lecture: "Virtual Machine"
+visible: 0
+excerpt: "<p>In questo post le istruzioni per installare la virtual machine.</p>"
 ---
 
 In questo post le istruzioni per installare la virtual machine.

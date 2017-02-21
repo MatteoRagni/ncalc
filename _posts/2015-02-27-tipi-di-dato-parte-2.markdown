@@ -5,6 +5,8 @@ date:   2015-02-27 10:00:00
 categories: post
 permalink: /lecture6c/
 lecture: "Lezione 6 (parte 2)"
+visible: 1
+excerpt: "<p>Scopriamo la classe <b>String</b>. In seguito passeremo alla analisi del tipo <b>Hash</b>, una sorta di array ordinato per mezzo di chiavi piuttosto che per mezzo di un indice numerico. Nell'arco della lezione citiamo la classe <b>Symbol</b></p>"
 ---
 
 Scopriamo la classe **String**. In seguito passeremo alla analisi del tipo **Hash**, una sorta di array ordinato per mezzo di chiavi piuttosto che per mezzo di un indice numerico. Nell'arco della lezione citiamo la classe **Symbol**
@@ -74,7 +76,7 @@ floating_point = 1.2345
 stringa        = "hello!"
 
 formato = ("%s
-  \t questo è intero: %10d 
+  \t questo è intero: %10d
   \t questo è floating: %2.2f
   \t questo è scientifico: %3.3e" % [stringa, integer,
                       floating_point, floating_point])

@@ -5,6 +5,8 @@ date:   2015-02-22 23:00:00
 categories: post
 permalink: /lecture6/
 lecture: "Lezione 6 (teorica)"
+visible: 1
+excerpt: "<p>OOP (Object Oriented Programmming): abbiamo raccolto l'insieme degli strumenti necessari a lanciarci e capire la programmazione orientata agli oggetti. In questa lezione (per adesso solo teorica) introduciamo alcuni degli elementi che ci aiuteranno a capire meglio il linguaggio Ruby, un linguaggio <b>puramente orientato agli oggetti</b>.</p>"
 ---
 
 OOP (Object Oriented Programmming): abbiamo raccolto l'insieme degli strumenti
@@ -62,7 +64,7 @@ caratteristiche sono detti **attributi**.
 
 Si considera come attributo anche lo **stato** attuale della radio generica
 come:
- 
+
  * il valore del volume la frequenza di sintonia se è accesa o spenta etc.
 
 Pensando alle radio potrebbero esservi venute in mente le manopoline per
@@ -121,8 +123,8 @@ Più o meno sappiamo della presenza di tutte queste cose in una radio, ma
 difficilmente conosciamo nei minimi particolari lo schema effettivo dei
 circuiti, che ci spiega come sono implementate le funzioni di:
 
- * ricezione 
- * demodulazione 
+ * ricezione
+ * demodulazione
  * amplificazione
  * etc.
 
@@ -148,17 +150,17 @@ stiamo pensando ad una **nuova classe**, simile alla classe Radio, con la
 quale condivide gli attributi, i metodi e l'interfaccia, e implementa
 qualcosina in più, come la visualizzazione dell'ora e la funzionalità di
 sveglia. Quindi oltre agli attributi precedenti avremo:
- 
- * attributi del display 
- * ora attuale ora di sveglia 
- * stato della sveglia 
+
+ * attributi del display
+ * ora attuale ora di sveglia
+ * stato della sveglia
  * etc.
 
 metodi nuovi:
 
- * imposta ora 
- * imposta sveglia 
- * attiva/disattiva sveglia 
+ * imposta ora
+ * imposta sveglia
+ * attiva/disattiva sveglia
  * etc.
 
 senza contare i metodi e gli attributi privati necessari alla implementazione
@@ -204,7 +206,7 @@ Passeremo poi alla classe degli **Array**, che sono molto comode nel campo della
 
 ### Numeric
 
-La definizione di un numero intero si ottiene mediante l'assegnazione ad una variabile di un numero intero (senza virgola). Quella variabile diventa automaticamente una istanza della classe Fixnum, e risponde a tutte le regole della aritmetica tra interi. 
+La definizione di un numero intero si ottiene mediante l'assegnazione ad una variabile di un numero intero (senza virgola). Quella variabile diventa automaticamente una istanza della classe Fixnum, e risponde a tutte le regole della aritmetica tra interi.
 
 Un numero reale si definisce per mezzo della assegnazione ad una variabile di un numero con valore decimale o in notazione scientifica. Quella variabile diventa una istanza della classe Float, e risponde a tutte le regole della aritmetica tra numeri reali.
 

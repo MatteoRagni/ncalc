@@ -5,6 +5,8 @@ date:   2015-02-18 14:00:00
 categories: post
 permalink: /lecture5/
 lecture: "Lezione 5"
+visible: 1
+excerpt: "<p>In questa lezione andiamo a vedere un utilizzo avanzato delle funzioni, approfondire le istruzioni condizionali e imparare ad utilizzare i cicli classici. Nella ultima parte della lezione metteremo insieme queste conoscenze per scrivere uno script che sia in grado di eseguire la operazione di fattoriale.</p>"
 ---
 
 In questa lezione andiamo a vedere un utilizzo avanzato delle funzioni, approfondire le istruzioni condizionali e imparare ad utilizzare i cicli classici. Nella ultima parte della lezione metteremo insieme queste conoscenze per scrivere uno script che sia in grado di eseguire la operazione di fattoriale.

@@ -5,6 +5,8 @@ date:   2015-04-22 10:00:00
 categories: post
 permalink: /lecture8b/
 lecture: "Lezione 8 (parte 2)"
+visible: 1
+excerpt: "<p>Implementiamo le ultime funzioni accessorie utili per la nostra classe <b>Matrix</b>, per concludere con quelli che sono i metodi più <i>algoritmici</i>, quali funzioni algebriche e prodotto tra matrici.</p>"
 ---
 
 Implementiamo le ultime funzioni accessorie utili per la nostra classe `Matrix`, per concludere con quelli che sono i metodi più "algoritmici", quali funzioni algebriche e prodotto tra matrici.

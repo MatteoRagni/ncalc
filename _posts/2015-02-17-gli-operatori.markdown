@@ -5,7 +5,8 @@ date:   2015-02-16 16:00:00
 categories: post
 permalink: /lecture4/
 lecture: "Lezione 4"
-excerpt: "<p>Impariamo a definire ed utilizzare le funzioni (o metodi) e introduciamo gli operatori di Ruby. Scopriamo `if` e scriviamo la nostra prima funzione numerica, sfruttando tutte le conoscenze acquisite fino ad ora.</p>"
+visible: 1
+excerpt: "<p>Impariamo a definire ed utilizzare le funzioni (o metodi) e introduciamo gli operatori di Ruby. Scopriamo <code class='highlighter-ruby'>if</code> e scriviamo la nostra prima funzione numerica, sfruttando tutte le conoscenze acquisite fino ad ora.</p>"
 ---
 
 Impariamo a definire ed utilizzare le funzioni (o metodi) e introduciamo gli operatori di Ruby. Scopriamo `if` e scriviamo la nostra prima funzione numerica, sfruttando tutte le conoscenze acquisite fino ad ora.
@@ -17,7 +18,7 @@ Impariamo a definire ed utilizzare le funzioni (o metodi) e introduciamo gli ope
 
 Una funzione, e' un particolare costrutto sintattico che permette di raggruppare diverse righe di codice in una struttura unica che possa essere _richiamata_ piu' volte attraverso il codice. Le funzioni permettono di racchiudere codice che esegue uno specifico algoritmo/sequenza di istruzioni in un punto solo, a vantaggio sia **del tempo di sviluppo di un progetto**, che della **manutenibilita'** del codice.
 
-Ruby e' un linguaggio fortemente **orientato agli oggetti**, quindi solitamente le funzioni sono chiamate **metodi**. 
+Ruby e' un linguaggio fortemente **orientato agli oggetti**, quindi solitamente le funzioni sono chiamate **metodi**.
 
 ### Definire una funzione
 La sintassi per definre una funzione e' la seguente
@@ -28,8 +29,8 @@ La sintassi per definre una funzione e' la seguente
 # Funzione puts_asterisk
 # input:
 #   n - intero con numero di punti da scrivere
-# returns: 
-#   ret_string - una stringa 
+# returns:
+#   ret_string - una stringa
 # La funzione stampa una linea di asterischi lunga n elementi
 def puts_asterisk(n)
   ret_string = "*" * n
@@ -77,7 +78,7 @@ Facciamo una introduzione agli operatori aritmetici, che possono essere utilizza
 
 ### Operatori di assegnazione
 
-Gli operatori di assegnazione sono tipologie di operatori aritmetici che effettuano direttamente la assegnazione 
+Gli operatori di assegnazione sono tipologie di operatori aritmetici che effettuano direttamente la assegnazione
 
 | Operatore	| Descrizione																									|Esempio					|
 |:---------:|---------------------------------------------------------------------------------------------------------------|:-------------------------:|
@@ -165,7 +166,7 @@ if a > 0 then
   puts "a > 0"
 else
   puts "a < 0"
-end 
+end
 ```
 
 ### Radici di un polinomio
@@ -193,13 +194,13 @@ e le soluzioni sono nella forma:
 $$
 \begin{align}
 x_{r} &= & \left\{ \begin{matrix}
- \dfrac{-b\pm\sqrt{\delta}}{2a} &\quad \delta \geq 0\\ 
+ \dfrac{-b\pm\sqrt{\delta}}{2a} &\quad \delta \geq 0\\
  \\
  -\dfrac{b}{2a} &\quad \delta < 0
 \end{matrix} \right. \\
 \\
 x_{i} &= & \left\{ \begin{matrix}
- 0 &\quad \delta \geq 0\\ 
+ 0 &\quad \delta \geq 0\\
  \\
  \pm\dfrac{\sqrt{\delta}}{2a} &\quad \delta < 0
 \end{matrix} \right.
@@ -221,9 +222,9 @@ La funzione radice quadratain Ruby e' `Math.sqrt`.
 #  b - Float, coefficiente dell'elemento di 1 ordine
 #  c - Float, termine noto
 # return
-#  [ radice reale 1, radice immaginaria 1, 
+#  [ radice reale 1, radice immaginaria 1,
 #    radice reale 2, radice immaginaria 2 ] - array con le radici
-# La funzione calcola le radice di un polinomio, specificati i 
+# La funzione calcola le radice di un polinomio, specificati i
 # coefficiente e i termini noti.
 def radici_quadratica(a,b,c)
 
@@ -232,14 +233,14 @@ def radici_quadratica(a,b,c)
 
   if delta >= 0 then
     # caso radici reali
-    sdelta = Math.sqrt(delta) 
+    sdelta = Math.sqrt(delta)
     x1r = (-b+sdelta)/(2*a)
     x2r = (-b-sdelta)/(2*a)
     x1i = 0
     x2i = 0
   else
     # caso radici complesse
-    sdelta = Math.sqrt(-delta) 
+    sdelta = Math.sqrt(-delta)
     x1r = -b/(2*a)
     x2r = -b/(2*a)
     x1i = sdelta/(2*a)
@@ -249,16 +250,16 @@ def radici_quadratica(a,b,c)
   return [x1r, x1i, x2r, x2i]
 end
 
-# Ora che abbiamo implementato la funzione, 
-# possiamo testarla. Ne approfittiamo per 
+# Ora che abbiamo implementato la funzione,
+# possiamo testarla. Ne approfittiamo per
 # vedere come interpolare una stringa per inserire
 # eventuali valori numerici
-res = radici_quadratica(1,2,3) 
- 
+res = radici_quadratica(1,2,3)
+
 puts "Prima radice:"
 print "Parte reale      = ", res[0], "\n"
 print "Parte imaginaria = ", res[1], "\n"
- 
+
 puts "Seconda radice:"
 puts "Parte reale      = #{res[2]}"
 puts "Parte imaginaria = #{res[3]}"

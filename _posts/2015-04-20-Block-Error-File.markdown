@@ -5,6 +5,8 @@ date:   2015-04-20 10:00:00
 categories: post
 permalink: /lecture7/
 lecture: "Lezione 7"
+visible: 1
+excerpt: "<p>Riprendiamo i blocchi e vediamo il loro utilizzo in modo leggermente più approfondito. Esploriamo la classe <b>File</b>, per leggere e scrivere i risultati dei nostri algoritmi. Introduciamo il problema della programmazione robusta, con la classe delle <b>Exceptions</b>.</p>"
 ---
 
 Riprendiamo i blocchi e vediamo il loro utilizzo in modo leggermente più approfondito. Esploriamo la classe `File`, per leggere e scrivere i risultati dei nostri algoritmi. Introduciamo il problema della programmazione robusta, con la classe delle `Exceptions`.
@@ -39,13 +41,13 @@ continue = true
 
 case LANG
 when "IT"
-	interface = Proc.new { 
+	interface = Proc.new {
     puts "Il risultato è: #{number}. Provare ancora? [S/N]"
 	  input = gets.chomp
     input == "S"
   }
 when "EN"
-  interface = Proc.new { 
+  interface = Proc.new {
     puts "The result is: #{number}. Try again? [Y/N]"
 	  input = gets.chomp
     input == "Y"
@@ -202,10 +204,10 @@ def integratore(a, b, n)
   delta = (b - a)/(n.to_f)
   # F rappresenta la primitiva
   primitive_F = 0.0
-  
+
   primitive_F += 0.5 * yield(a)
   primitive_F += 0.5 * yield(b)
-  
+
   for s in 1...n do
     # calcoliamo f(x_s)
     primitive_F += yield(s*delta + a)
@@ -235,7 +237,7 @@ Nei File dobbiamo tenere in considerazione 3 cose:
  * attributi di accesso al file (in lettura, scritture, o lettura e scrittura?)
  * encoding esterno del file
  * encoding interno del file
- 
+
 Abbiamo visto nella primissima lezione che cosa sono gli attributi di un file. Anche durante la apertura di un file in Ruby, dobbiamo specificare in che modo vogliamo accedere a tale file. Per quanto riguarda l'encoding, vi basti sapere che tutti i caratteri diversi dai 256 caratteri fondamentali della tabella ASCII (cercatela su Google se non sapete cos'è), sono espressi per mezzo di codici. La codifica di tale codice è chiamata encoding. Se un vostro collega russo vi invia un file creato sul suo computer che ha un determinato encoding, probabilmente è una buona idea specificare come encoding esterno quello relativo al sistema del vostro collega, mentre come coding interno quello relativo al vostro sistema, in modo tale da leggere correttamente il file. Se leggete file creati sullo stesso sistema, potrete essere abbastanza sicuri di non dover specificare l'encoding.
 
 ### Aprire un file
@@ -257,11 +259,11 @@ file = File.open("file.txt", "r")
 # linea per linea? il blocco each_line
 data = []
 file.each_line_ do |line|
-  # line è una stringa che contiene 
+  # line è una stringa che contiene
   # i caratteri contenuti nel file. Da notare
-  # possiamo scorrere il file in una unica 
+  # possiamo scorrere il file in una unica
   # direzione (non sempre vero...)
-  
+
   # usiamo su line i metodi delle stringhe
   # per suddividere tutti gli elementi della
   # linea che sono separati dal carattere tab
@@ -269,14 +271,14 @@ file.each_line_ do |line|
   # usiamo map! per convertire tutti gli elementi
   # della linea da String a Float
   line_data.map! { |e| e.to_f }
-  
+
   # a questo punto line_data contiene tutti float,
   # possiamo accodarlo in data
   data << line_data
 end
 
 # Arrivati qui, data sarà un Array
-# di dimensione pari al numero di linee 
+# di dimensione pari al numero di linee
 # del file, ogni elemento di data è un Array
 # che contiene i dati contenuti sulla linea.
 
@@ -299,7 +301,7 @@ File.open("file.txt", "r") { |file|
     line_data.map! { |e| e.to_f }
     data << line_data
   }
-} # <- qui il file viene automaticamente chiuso dal 
+} # <- qui il file viene automaticamente chiuso dal
   #    metodo open
 ```
 
@@ -327,7 +329,7 @@ Per aprire un file in scrittura, utilizziamo l'attributo di accesso `"w"` al pos
 
  * `puts`: inserisce una riga di testo e la termina con il carattere di nuova linea
  * `print`: inserisce dei dati nel file senza aggiungere un carattere di fine linea
- 
+
 Per vedere come funzionano, immaginiamo di avere ancora la nostra variabile `data` costruita come `Array` di `Array` di dati, e vogliamo scriverlo in un file:
 
 ```ruby
@@ -335,13 +337,13 @@ Per vedere come funzionano, immaginiamo di avere ancora la nostra variabile `dat
 
 data # <- consideratelo un Array di Array
      #    contenente dati da scrivere in un file
-     
+
 File.open("nuovo_file.txt", "w") { |file|
   data.each { |line_data|
     line_data.each { |el|
       file.print "#{el}\t"
     }
-    file.puts # <- lo usiamo per scrivere "\n" 
+    file.puts # <- lo usiamo per scrivere "\n"
   }
 } # <- chiusura automatica del file
 
@@ -377,10 +379,10 @@ def dividi(dividendo, divisore)
   # Controllo sugli argomenti in ingresso
   raise ArgumentError, "Il dividendo deve essere un numero" if not dividendo.is_a?(Numeric)
   raise ArgumentError, "Il divisore deve essere un numero" if not divisore.is_a?(Numeric)
-  
+
   # Controllo che il divisore sia diverso da zero
   raise RuntimeError, "Il divisore deve essere diverso da zero" if divisore == 0
-  
+
   return dividendo/divisore
 end
 ```
@@ -389,7 +391,7 @@ Da notare l'introduzione di due tipi diversi di errore:
 
  * `ArgumentError`: l'errore è sul tipo di argomento passato alla funzione
  * `RuntimeError`: gli argomenti sono corretti, ma quello che contiene uno degli argomenti andrà a generare un errore
- 
+
 Gli errori sono innalzati dall'interprete se e solo se l'`if` postfisso ritorna `true`. Se nessun errore viene generato, la funzione continua con la sua esecuzione classica.
 
 #### Recuperare errori
@@ -402,15 +404,15 @@ def dividi(dividendo, divisore)
   # Controllo sugli argomenti in ingresso
   raise ArgumentError, "Il dividendo deve essere un numero" if not dividendo.is_a?(Numeric)
   raise ArgumentError, "Il divisore deve essere un numero" if not divisore.is_a?(Numeric)
-  
+
   # Controllo che il divisore sia diverso da zero
   raise RuntimeError, "Il divisore deve essere diverso da zero" if divisore == 0
-  
+
   return dividendo/divisore
 rescue RuntimeError
   if divisore == 0 then
     divisore += 10**(-15) # il nostro epsilon
-    retry                 # riprova ad eseguire la funzione dall'inizio, con 
+    retry                 # riprova ad eseguire la funzione dall'inizio, con
                           # divisore modificato
   end
 end
@@ -426,15 +428,15 @@ def dividi(dividendo, divisore)
   # Controllo sugli argomenti in ingresso
   raise ArgumentError, "Il dividendo deve essere un numero" if not dividendo.is_a?(Numeric)
   raise ArgumentError, "Il divisore deve essere un numero" if not divisore.is_a?(Numeric)
-  
+
   # Controllo che il divisore sia diverso da zero
   raise RuntimeError, "Il divisore deve essere diverso da zero" if divisore == 0
-  
+
   return dividendo/divisore
 rescue RuntimeError
   if divisore == 0 then
     divisore += 10**(-15) # il nostro epsilon
-    retry                 # riprova ad eseguire la funzione dall'inizio, con 
+    retry                 # riprova ad eseguire la funzione dall'inizio, con
                           # divisore modificato
   end
 ensure
