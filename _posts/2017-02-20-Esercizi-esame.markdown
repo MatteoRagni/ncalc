@@ -14,6 +14,8 @@ In questa pagina trovate una serie di esercizi. Per ogni esercizio è fornita an
 * table of contents.
 {:toc}
 
+___
+
 ## Bolletta
 
 
@@ -49,6 +51,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/bolletta" | relative_url }})
+
+___
 
 ## Campionato
 
@@ -102,6 +106,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/campionato" | relative_url }})
 
+___
+
 ## Collatz
 
 Implementare una funzione esterna 'collatz'.
@@ -147,10 +153,11 @@ $$
 
 sapendo che se:
 
- * $$x_0 = 0$$
- * $$x_1 = 2$$
- * $$y_0 = 1$$
- * $$n = 10$$
+$$
+\begin{array}{cccc}
+x_0 = 0 & x_1 = 2 & y_0 = 1 & n = 10
+\end{array}
+$$
 
 la soluzione che deve essere restituita è (a meno di errori numerici):
 ```ruby
@@ -168,6 +175,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/collatz" | relative_url }})
+
+___
 
 ## Cornice
 
@@ -193,6 +202,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/cornice" | relative_url }})
+
+___
 
 ## Cumulative Sum
 
@@ -227,6 +238,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/cumulativesum" | relative_url }})
+
+___
 
 ## Derivative
 
@@ -264,6 +277,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/derivative" | relative_url }})
+
+___
 
 ## Differenze Divise
 
@@ -325,6 +340,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/diffdiv" | relative_url }})
 
+___
+
 ## Grafo orientato
 
 Scrivere una classe Ruby che implementa una [**Grafo orientato**](https://it.wikipedia.org/wiki/Grafo#Grafi_orientati_e_grafi_semplici).
@@ -359,6 +376,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/grafo" | relative_url }})
 
+___
+
 ## Halley
 
 Scrivere la funzione `halley` che si aspetta 3 argomenti:
@@ -385,7 +404,7 @@ $$
 x_{k+1} = x_{k} - \dfrac{f(x_k) \, \left.\frac{df}{dx}\right|_{x_k}}{\left.\frac{df}{dx}\right|_{x_k}^2 - \frac{1}{2} \, f(x_k) \, \left.\frac{ {d}^{2}f}{ {dx}^{2} }\right|_{x_k}}
 $$
 
-Le iterazioni terminano se si supera `imax` (fallimento) o se $$|f(x_k)| \leq \mathrm{tol}$$ (successo)
+Le iterazioni terminano se si supera `imax` (fallimento) o se $$-\mathrm{tol} \leq f(x_k) \leq \mathrm{tol}$$ (successo)
 
 ```ruby
 def halley(x0, tol, imax)
@@ -394,6 +413,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/halley" | relative_url }})
+
+___
 
 ## Heun
 
@@ -458,6 +479,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/heun" | relative_url }})
 
+___
+
 ## Lettere (a)
 
 Si scriva una funzione `letters` che dato come argomento una stringa restituisce una stringa contenente le lettere `[a-z]` ordinate e convertite in minuscolo presenti nella stringa:
@@ -485,6 +508,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/letters/a" | relative_url }})
+
+___
 
 ## Lettere (b)
 
@@ -518,6 +543,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/letters/b" | relative_url }})
 
+___
+
 ## Massimo locale
 
 Scivere la funzione `local_max(vec)` che dato un vettore di numeri calcola le posizioni dei massimi locali cioe' gli indici tali che
@@ -535,6 +562,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/localmax" | relative_url }})
+
+___
 
 ## Minimo Locale
 
@@ -571,6 +600,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/localmin" | relative_url }})
 
+___
+
 ## Max Min
 
 Scivere la funzione `max_min(vec)` che dato un vettore di numeri calcola il massimo degli elementi di indice pari e il minimo degli elementi di indice dispari. Il risultato è restituito in una hash con i campi `:max` e `:min`.
@@ -582,6 +613,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/maxmin" | relative_url }})
+
+___
 
 ## Minimo Comune Divisore
 
@@ -617,12 +650,22 @@ end
 
 [Vai alla soluzione]({{ "/solutions/mcd" | relative_url }})
 
+___
+
 ## Minimo Comune Multiplo
 
 Scivere la funzione mcm(a,b) che dati due numeri interi a e b
 maggiori di 0 calcola il loro minimo comune multiplo.
 
-> **Proprieta MCM**: il minimo comune multiplo è il numero che è divisibile sia per $$a$$ che per $$b$$. Se un numero $$c$$ e' divisibile sia $$a$$ che $$b$$ allora $$c \geq \mathrm{mcm}(a,b)$$. Questo implica che; $$\mathrm{mcm}(a,b) = (a\,b)/\amthrm{mcd(a,b)}$$, dove $$\mathrm{mcd}(a,b)$$ è il massimo comun divisore di $$a$$ e $$b$$.
+> **Proprieta MCM**: il minimo comune multiplo è il numero che è divisibile sia per $$a$$ che per $$b$$. Se un numero $$c$$ e' divisibile sia $$a$$ che $$b$$ allora $$c \geq \mathrm{mcm}(a,b)$$.
+
+Questo implica che
+
+$$
+\mathrm{mcm}(a,b) = (a\,b)/\mathrm{mcd(a,b)}
+$$
+
+dove $$\mathrm{mcd}(a,b)$$ è il massimo comun divisore di $$a$$ e $$b$$.
 
 Per calcolare l'MCD, utile a calcolare l'MCM, di due numeri potete usare i seguenti algoritmi:
 
@@ -651,6 +694,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/mcm" | relative_url }})
 
+___
+
 ## Mix
 
 Scrivere la funzione `mix` che dati due vettori costruisce un vettore che alterna gli elementi del primo vettore con quelli del secondo. Ad esempio:
@@ -674,6 +719,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/mix" | relative_url }})
+
+___
 
 ## Monotone
 
@@ -711,6 +758,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/monotone" | relative_url }})
+
+___
 
 ## Morse
 
@@ -757,6 +806,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/morse" | relative_url }})
 
+___
+
 ## Newton
 
 Scrivere la funzione newton che si aspetta 3 argomenti:
@@ -790,6 +841,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/newton" | relative_url }})
 
+___
+
 ## Odd Even
 
 Scrivere la funzione `odd_even(vec)` che dato un vettore di numeri calcola costruisce un vettore con all'inizio gli elementi del vettore di indice dispari e poi gli elementi di indice pari. Ad esempio:
@@ -808,6 +861,8 @@ def odd_even(v)
 end
 ```
 [Vai alla soluzione]({{ "/solutions/oddeven" | relative_url }})
+
+___
 
 ## Ordered (a)
 
@@ -844,6 +899,7 @@ end
 
 [Vai alla soluzione]({{ "/solutions/ordered/a" | relative_url }})
 
+___
 
 ## Ordered (b)
 
@@ -862,6 +918,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/ordered/b" | relative_url }})
+
+___
 
 ## Ordered (c)
 
@@ -888,6 +946,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/ordered/c" | relative_url }})
+
+___
 
 ## Ovale
 
@@ -928,6 +988,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/ovale" | relative_url }})
 
+___
+
 ## Pairs
 
 Scrivere la funzione `pairs` che dato un array in ingresso cerca i sotto-array di elementi consecutivi uguali. Il risultato va scritto in una hash le cui chiavi sono numeri >= 2. Ad ogni chiave corrisponde un array e ogni elemento dell'array è a sua volta un array che contiene l'elemento ripetuto.
@@ -952,6 +1014,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/pairs" | relative_url }})
+
+___
 
 ## Pangram
 
@@ -990,6 +1054,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/pangram" | relative_url }})
 
+___
+
 ## Pine
 
 Si scriva una funzione "pine" che dato come argomento un numero intero positivo restituisce una stringa che rappresenta un "pino" stilizzato. Ad esempio:
@@ -1024,6 +1090,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/pangram" | relative_url }})
+
+___
 
 ## Power
 
@@ -1061,6 +1129,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/power" | relative_url }})
+
+___
 
 ## Ricorrenza
 
@@ -1123,6 +1193,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/recurr" | relative_url }})
 
+___
+
 ## Le 8 Regine
 
 > **Nota:** Questo è probabilmente l'esercizio più complesso.
@@ -1163,6 +1235,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/regine" | relative_url }})
 
+___
+
 ## Sequence
 
 Si scriva una funzione `sequence` che dato un vettore di interi restituisce un vettore di hash.
@@ -1199,6 +1273,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/sequence" | relative_url }})
 
+___
+
 ## Simpson
 
 Scrivere la funzione simpson che si aspetta 3 argomenti
@@ -1216,6 +1292,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/simpson" | relative_url }})
+
+___
 
 ## Stack
 
@@ -1249,8 +1327,9 @@ end
 
 [Vai alla soluzione]({{ "/solutions/stack" | relative_url }})
 
+___
 
-## Start
+## Star
 
 
 Scrivere la funzione `star` che si aspetta 3 argomenti:
@@ -1286,7 +1365,7 @@ $$
 x_2 = x_1 - \dfrac{ f_1 }{ d_{1,0} }
 $$
 
-Le iterate terminano se si supera `imax` (fallimento) o se $$|f(x_k)| \leq tol$$ (successo).
+Le iterate terminano se si supera `imax` (fallimento) o se $$-\mathrm{tol} \leq f(x_k) \leq \mathrm{tol}$$ (successo).
 
 ```ruby
 def star(x0, x1, tol, imax)
@@ -1295,6 +1374,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/star" | relative_url }})
+
+___
 
 ## Somma e Prodotto
 
@@ -1332,6 +1413,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/sumprod" | relative_url }})
 
+___
+
 ## To Hours
 
 Si scriva una funzione `to_hour` che dati 2 argomenti:
@@ -1341,8 +1424,6 @@ Si scriva una funzione `to_hour` che dati 2 argomenti:
  * `m` numero del mese (numero tra 1 e 12)
 
 controlla che la data sia corretta e la converte in ore dall'inizio dell'anno.
-
-Attenzione che ore 0 del 1 gennaio deve dare 0 ore come risultato.
 
 | Mese          | Giorni      |
 |---------------|-------------|
@@ -1359,6 +1440,8 @@ Attenzione che ore 0 del 1 gennaio deve dare 0 ore come risultato.
 |  novembre     | 30 giorni   |
 |  dicembre     | 31 giorni   |
 
+Attenzione che ore 0 del 1 gennaio deve dare 0 ore come risultato.
+
 ```ruby
 def to_hour(h, d, m)
   # completare
@@ -1366,6 +1449,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/tohour" | relative_url }})
+
+___
 
 ## Tre ottavi
 
@@ -1412,6 +1497,8 @@ end
 
 [Vai alla soluzione]({{ "/solutions/treottavi" | relative_url }})
 
+___
+
 ## Triangolare
 
 Un numero $$n$$ e' un numero triangolare se esiste un intero $$k$$ tale che:
@@ -1429,6 +1516,8 @@ end
 ```
 
 [Vai alla soluzione]({{ "/solutions/triangolare" | relative_url }})
+
+___
 
 ## Triangolo
 
