@@ -35,5 +35,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - _posts/2015-02-06-virtual-machine.markdown
+  - _posts/solutions/2017-02-21-soluzione-.markdown
 encoding: utf-8
-
