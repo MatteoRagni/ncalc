@@ -48,35 +48,16 @@ Se Ruby non é presente per prima cosa occorre che Xcode sia installato. Poi la 
 [editra]: http://editra.org/
 [rvm]: http://freegoweb.it/stream/ruby-e-rails-in-italiano-parte-1
 
-## Altri riferimenti
-
-Libri
-
-Alfio Quarteroni, Fausto Saleri, Paola Gervasio<br>
-[**Calcolo Scientifico, Esercizi e problemi risolti con MATLAB e Octave**][book1]<br>
-Collana UNITEXT, Springer, ISBN _978-88-470-2745-9_<br>
-
-Josef Stoer, R. Bulirsch<br>
-[Introduction to Numerical Analysis][book2]<br>
-Springer, ISBN: _978-1-4757-2274-1_<br>
-
 ## Software
 
 Questo blog è stato realizzando sfruttando:
 
  * [Jekyll][jj]: motore di generazione blog statici, in Ruby
- * [lightbox][ll]: gestore di immagini per web-pages
  * [jQuery][qq]: libreria javascript
  * [MathJax][mm]: interprete di formule matematiche latex/MathML
- * [ACE editor][aa]: editor con sintax highlighter per pagine web
 
 Un **grazie** a coloro che hanno messo a disposizione queste tecnologie, che ci hanno permesso di costruire questo sito.
 
-[book1]: http://www.springer.com/mathematics/book/978-88-470-2744-2
-[book2]: http://springer.libdl.ir/book/10.1007/978-1-4757-2272-7
 [jj]: http://jekyllrb.com/
-[ww]: https://github.com/xxuejie/webruby
-[ll]: http://lokeshdhakar.com/projects/lightbox2/
 [qq]: http://jquery.com
 [mm]: http://www.mathjax.org/
-[aa]: http://ace.c9.io/#nav=about
