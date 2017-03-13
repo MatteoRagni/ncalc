@@ -202,7 +202,7 @@ x_{r} &= & \left\{ \begin{matrix}
 x_{i} &= & \left\{ \begin{matrix}
  0 &\quad \delta \geq 0\\
  \\
- \pm\dfrac{\sqrt{\delta}}{2a} &\quad \delta < 0
+ \pm\dfrac{\sqrt{-\delta}}{2a} &\quad \delta < 0
 \end{matrix} \right.
 \end{align}
 $$
